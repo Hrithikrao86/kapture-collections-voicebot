@@ -5,7 +5,7 @@
 
 Maya is an outbound Voice AI Collections Agent for Kapture Finance. The system authenticates the intended customer before any debt information is disclosed, identifies the customer's intent, executes an appropriate resolution action, and records a final disposition.
 
-The source assignment requires an engineer-ready HLD covering architecture, state machine, compliance, API tools, edge cases, latency and observability. fileciteturn0file0L53-L79
+The source assignment requires an engineer-ready HLD covering architecture, state machine, compliance, API tools, edge cases, latency and observability. 
 
 ## 2. System Architecture
 
@@ -60,7 +60,7 @@ sequenceDiagram
 
 ## 3. Latency Budget
 
-Target end-to-end conversational turn latency is below 1.2 seconds as specified by the assignment. fileciteturn0file0L27-L33
+Target end-to-end conversational turn latency is below 1.2 seconds as specified by the assignment.
 
 | Hop | Target |
 |---|---:|
@@ -95,7 +95,7 @@ AUTH_PENDING
 
 `AUTH_PENDING -> AUTHENTICATED` is permitted **only** after a server tool response explicitly returns `verified: true`.
 
-The LLM must never infer successful authentication from conversational confidence alone. It must wait for the tool response. This is the central security requirement in the assignment. fileciteturn0file0L60-L62
+The LLM must never infer successful authentication from conversational confidence alone. It must wait for the tool response. This is the central security requirement in the assignment.
 
 ## 5. Intent and Entity Model
 
@@ -177,7 +177,7 @@ Output:
 }
 ```
 
-Vapi's current custom-tool contract uses a `tool-calls` request and expects a response containing `results` with the matching `toolCallId` and a serialized result. citeturn0search0turn0search11
+Vapi's current custom-tool contract uses a `tool-calls` request and expects a response containing `results` with the matching `toolCallId` and a serialized result. 
 
 ## 7. Authentication and Data Safety
 
@@ -191,7 +191,7 @@ Before successful verification, Maya must not disclose:
 - days past due
 - debt relationship with Kapture Finance
 
-The assignment explicitly requires zero third-party debt disclosure and authentication before debt disclosure. fileciteturn0file0L68-L71
+
 
 ### Logging
 
@@ -203,7 +203,7 @@ The model proposes tool parameters; the server validates the operation. A produc
 
 ## 8. Compliance and Guardrails
 
-The assignment specifies an 08:00–19:00 local calling window, no third-party disclosure before authentication, immediate DNC logging, and restrictions against unauthorized concessions. fileciteturn0file0L29-L33
+
 
 Additional guardrails in the implementation:
 
@@ -230,7 +230,7 @@ Additional guardrails in the implementation:
 | Silence/voicemail | Two re-prompts then hangup | `NO_RESPONSE` |
 | Hindi/Hinglish | Continue while preserving state | Existing disposition |
 
-The assignment explicitly calls for abuse, silence/voicemail, and language-switch handling. fileciteturn0file0L72-L75
+
 
 ## 10. Observability
 
@@ -247,7 +247,7 @@ Primary metrics:
 - Hangup/no-input rate
 - Escalation rate
 
-The first three metrics are directly specified by the assignment. fileciteturn0file0L76-L79
+
 
 ## 11. Failure Handling
 
@@ -279,11 +279,17 @@ The mock server uses environment configuration and PII-minimizing logs. For prod
 Demo deployment options:
 
 ```text
-Local Express :3000
-      ↓
-ngrok HTTPS tunnel
-      ↓
-Vapi Custom Tool Server URL
+Customer
+   ↓
+Vapi / Maya
+   ↓
+Vapi Custom Tool
+   ↓
+Render HTTPS
+   ↓
+Node.js / Express Mock Server
+   ↓
+Business Tools
 ```
 
 Vapi documents both server URLs and local tunneling workflows for receiving function-call webhooks. urlVapi Server URLs documentationturn0search4 urlVapi local development documentationturn0search9
@@ -302,4 +308,4 @@ The implementation is ready for demo when:
 - Vapi can reach the webhook
 - recorded demo shows happy path + edge case
 
-The assignment's final submission checklist requires the HLD, configured Vapi assistant, live mock server, 2–4 minute demo, and repository artifacts. fileciteturn0file0L483-L492
+
