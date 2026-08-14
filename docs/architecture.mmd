@@ -1,0 +1,32 @@
+sequenceDiagram
+    autonumber
+    actor Customer
+    participant Telephony as Telephony / Vapi
+    participant STT as Deepgram Nova-2
+    participant LLM as GPT-4o
+    participant API as Mock Tool API
+    participant TTS as ElevenLabs / Cartesia
+
+    Customer->>Telephony: Answers call
+    Telephony->>STT: Audio stream
+    STT-->>Telephony: Transcript
+    Telephony->>LLM: State + transcript
+    LLM-->>Telephony: Verification request
+    Telephony->>TTS: Text
+    TTS-->>Customer: Verify identity
+    Customer->>Telephony: Verification code
+    Telephony->>LLM: Transcript
+    LLM->>API: verify_customer
+    API-->>LLM: verified true/false
+    alt Verified
+        LLM-->>Telephony: Debt disclosure + negotiation
+        Customer->>Telephony: PTP / hardship / dispute / paid
+        LLM->>API: Resolution tool
+        API-->>LLM: Result
+        LLM->>API: mark_disposition
+        API-->>LLM: Logged
+    else Not verified
+        LLM-->>Telephony: Safe failure response
+    end
+    Telephony->>TTS: Final response
+    TTS-->>Customer: Goodbye

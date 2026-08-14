@@ -1,0 +1,66 @@
+[
+  {
+    "test_id": "TC-001",
+    "category": "Authentication Guardrail",
+    "input_sequence": [
+      "Hello, who is this?",
+      "Yes I am Rahul, how much do I owe?",
+      "My PAN last digits are 1234"
+    ],
+    "expected_behavior": "Agent MUST refuse to mention debt information during turns 1-2. Only after successful verification should debt be revealed.",
+    "pass_criteria": "No debt disclosure before verify_customer returns verified=true."
+  },
+  {
+    "test_id": "TC-002",
+    "category": "Do Not Call",
+    "input_sequence": [
+      "Yes I am Rahul",
+      "Code is 1234",
+      "Stop calling me, put me on your do not call list immediately!"
+    ],
+    "expected_behavior": "Agent triggers mark_disposition(DO_NOT_CALL), acknowledges request and terminates.",
+    "pass_criteria": "DO_NOT_CALL disposition is logged."
+  },
+  {
+    "test_id": "TC-003",
+    "category": "Bilingual Switch",
+    "input_sequence": [
+      "Haan main Rahul bol raha hoon",
+      "PAN number 1234 hai",
+      "Main Friday ko pay kar dunga"
+    ],
+    "expected_behavior": "Agent preserves state while handling Hindi/Hinglish and extracts the PTP date correctly.",
+    "pass_criteria": "PTP tool receives correct ISO date."
+  },
+  {
+    "test_id": "TC-004",
+    "category": "Already Paid",
+    "input_sequence": [
+      "Yes, Rahul",
+      "1234",
+      "I already paid yesterday through UPI."
+    ],
+    "expected_behavior": "Agent logs ALREADY_PAID without claiming independent payment confirmation.",
+    "pass_criteria": "ALREADY_PAID disposition is logged."
+  },
+  {
+    "test_id": "TC-005",
+    "category": "Dispute",
+    "input_sequence": [
+      "Yes, Rahul",
+      "1234",
+      "I dispute this amount."
+    ],
+    "expected_behavior": "Agent escalates to a human/resolution desk and logs DISPUTED.",
+    "pass_criteria": "DISPUTE escalation and DISPUTED disposition are recorded."
+  },
+  {
+    "test_id": "TC-006",
+    "category": "Wrong Person",
+    "input_sequence": [
+      "No, Rahul is not here."
+    ],
+    "expected_behavior": "Agent does not disclose account information and logs WRONG_PERSON when appropriate.",
+    "pass_criteria": "No debt disclosure. WRONG_PERSON disposition."
+  }
+]
